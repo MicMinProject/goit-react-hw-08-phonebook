@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, deleteItem, setFilter } from "../Utils/actions";
+import { setFilter, fetchAsync, addAsync, deleteAsync } from "../Utils/reducer";
 import Filter from "./Filter.jsx";
 import ContactForm from "./ContactForm.jsx";
 import ContactList from "./ContactList.jsx";
 
 function Phonebook() {
   const dispatch = useDispatch();
-  const contactsList = useSelector((state) => state.persistedReducer.contacts.items);
-  const filterString = useSelector((state) => state.persistedReducer.contacts.filter);
+  const contactsList = useSelector((state) => state.contactsReducer.contacts.items);
+  console.log(contactsList);
+  const filterString = useSelector((state) => state.contactsReducer.contacts.filter);
 
   const filteredOnes = contactsList.filter(contact => contact.name.toLowerCase().includes(filterString.toLowerCase()));
 
@@ -19,10 +20,10 @@ function Phonebook() {
     const name = form.elements.name.value;
     const number = form.elements.number.value;
     contactsList === []
-      ? dispatch(addItem({name: name, number: number, id: nanoid()}))
+      ? dispatch(addAsync({name: name, number: number, id: nanoid()}))
       : contactsList.some((contact) => contact.name === name)
       ? alert(`${name} is already in contacts`)
-      : dispatch(addItem({name: name, number: number, id: nanoid()}));
+      : dispatch(addAsync({name: name, number: number, id: nanoid()}));
     form.reset();
   };
 
@@ -31,7 +32,7 @@ function Phonebook() {
   };
 
   const handlerDelete = (e) => {
-    dispatch(deleteItem(e.currentTarget.id));
+    dispatch(deleteAsync(e.currentTarget.id));
   };
 
   

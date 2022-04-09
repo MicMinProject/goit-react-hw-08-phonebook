@@ -1,39 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './Components/App';
-import reportWebVitals from './reportWebVitals';
-import { contactsReducer } from './Utils/reducer';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./Components/App";
+import reportWebVitals from "./reportWebVitals";
+import contactsReducer from "./Utils/reducer";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { persistReducer, persistStore } from 'redux-persist';
-import localStorage from 'redux-persist/lib/storage';
-import { PersistGate } from 'redux-persist/integration/react';
+// import { persistReducer, persistStore } from 'redux-persist';
+// import localStorage from 'redux-persist/lib/storage';
+// import { PersistGate } from 'redux-persist/integration/react';
 
-const persistConfig = {
-  key: 'root',
-  storage: localStorage,
-}
+// const persistConfig = {
+//   key: 'root',
+//   storage: localStorage,
+// }
 
-const persistedReducer = persistReducer(persistConfig, contactsReducer);
+// const persistedReducer = persistReducer(persistConfig, contactsReducer);
 
 const store = configureStore({
   reducer: {
-    persistedReducer,
-  },
-  devTools: false});
+    contactsReducer,
+  }
+});
 
-  const persistedStore = persistStore(store)
+// const persistedStore = persistStore(store)
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistedStore}>
-        <App />
-      </PersistGate>
+      {/* <PersistGate loading={null} persistor={persistedStore}> */}
+      <App />
+      {/* </PersistGate> */}
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function

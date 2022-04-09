@@ -1,5 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { addItem, deleteItem, setFilter } from './actions';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchContacts, addContact, deleteContact } from "./fetchAPI";
 
 const INITIAL_STATE = {
   contacts: {
@@ -8,23 +8,49 @@ const INITIAL_STATE = {
   },
 };
 
-const contactsReducer = createReducer(INITIAL_STATE, (builder) => {
-  builder
-    .addCase(addItem, (state, action) =>{
-      state.contacts.items = [...state.contacts.items, action.payload]
-    })
-    .addCase(deleteItem, (state, action) =>{
-      state.contacts.items = state.contacts.items.filter(
-        (contact) => action.payload !== contact.id
-      )
-    })
-    .addCase(setFilter, (state, action) =>{
-      state.contacts.filter = action.payload
-    })
-    .addDefaultCase((state, action) => {})
-})
+const fetchAsync = createAsyncThunk("contacts/fetchContacts", async () => {
+  const response = await fetchContacts();
+  return response;
+});
 
-export { contactsReducer, INITIAL_STATE };
+const addAsync = createAsyncThunk("contacts/addContact", async (contacts) => {
+  const response = await addContact(contacts);
+  return response;
+});
+
+const deleteAsync = createAsyncThunk("contacts/deleteContact", async (id) => {
+  await deleteContact(id);
+  const response = await fetchContacts();
+  return response;
+});
+
+const contactsSlice = createSlice({
+  name: "contacts",
+  initialState: INITIAL_STATE,
+  reducers: {
+    setFilter: (state, action) => {
+      state.contacts.filter = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAsync, (state, action) => {
+        state.contacts.items = action;
+      })
+      .addCase(addAsync, (state, action) => {
+        state.contacts.items = [...state.contacts.items, action.payload];
+      })
+      .addCase(deleteAsync, (state, action) => {
+        state.contacts.items = state.contacts.items.filter(
+          (item) => item.id !== action.payload,
+        );
+      });
+  },
+});
+
+export { INITIAL_STATE, fetchAsync, addAsync, deleteAsync };
+export const { setFilter } = contactsSlice.actions;
+export default contactsSlice.reducer;
 
 // const reducer = (state = INITIAL_STATE, action) => {
 //   switch (action.type) {
@@ -52,4 +78,3 @@ export { contactsReducer, INITIAL_STATE };
 //       return state;
 //   }
 // };
-
