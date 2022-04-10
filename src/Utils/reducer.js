@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "./fetchAPI";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchAsync, addAsync, deleteAsync } from "./fetchAPI";
 
 const INITIAL_STATE = {
   contacts: {
@@ -7,22 +7,6 @@ const INITIAL_STATE = {
     filter: "",
   },
 };
-
-const fetchAsync = createAsyncThunk("contacts/fetchContacts", async () => {
-  const response = await fetchContacts();
-  return response;
-});
-
-const addAsync = createAsyncThunk("contacts/addContact", async (contacts) => {
-  const response = await addContact(contacts);
-  return response;
-});
-
-const deleteAsync = createAsyncThunk("contacts/deleteContact", async (id) => {
-  await deleteContact(id);
-  const response = await fetchContacts();
-  return response;
-});
 
 const contactsSlice = createSlice({
   name: "contacts",
@@ -34,16 +18,14 @@ const contactsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync, (state, action) => {
-        state.contacts.items = action;
+      .addCase(fetchAsync.fulfilled, (state, action) => {
+        state.contacts.items = action.payload;
       })
-      .addCase(addAsync, (state, action) => {
+      .addCase(addAsync.fulfilled, (state, action) => {
         state.contacts.items = [...state.contacts.items, action.payload];
       })
-      .addCase(deleteAsync, (state, action) => {
-        state.contacts.items = state.contacts.items.filter(
-          (item) => item.id !== action.payload,
-        );
+      .addCase(deleteAsync.fulfilled, (state, action) => {
+        state.contacts.items = action.payload;
       });
   },
 });

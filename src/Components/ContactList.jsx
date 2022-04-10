@@ -1,7 +1,7 @@
 import React from 'react';
 // this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
 /** @jsxImportSource @emotion/react */
-import { jsx } from '@emotion/react'
+import { jsx } from '@emotion/react';
 import PropTypes from 'prop-types';
 
 const ContactList = ({contacts, onClick}) =>{
@@ -18,7 +18,7 @@ const ContactList = ({contacts, onClick}) =>{
             key={contact.id}
             id={contact.id} 
             onClick={onClick} 
-          >{contact.name}: {contact.number}
+          >{contact.name}: {contact.phone}
             <button 
               css={{
                 backgroundColor: '#ffffff',
