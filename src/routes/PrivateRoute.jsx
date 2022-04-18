@@ -7,7 +7,8 @@ export const PrivateRoute = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    !token && navigate("/Login");
+    !token && navigate("/login");
+    console.log(token)
   }, [token]);
 
   return <Outlet />;

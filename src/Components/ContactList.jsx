@@ -36,6 +36,7 @@ const ContactList = ({ contacts, onClick, onChange }) => {
                   height: "45px",
                   alignItems: "center",
                   display: "flex",
+                  paddingRight: '130px',
                 }}
                 key={contact.id}
                 id={contact.id}
