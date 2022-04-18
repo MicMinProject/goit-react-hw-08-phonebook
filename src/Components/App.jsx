@@ -1,23 +1,39 @@
-import Phonebook from './Phonebook.jsx';
-import ErrorBoundary from './ErrorBoundary.jsx';
+import Phonebook from "./Phonebook.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
+import { Login } from "../service/Login";
+import { Register } from "../service/Register";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { MainPage } from "../service/MainPage";
+import { HomePage } from "../service/HomePage";
+import { PrivateRouting } from '../routes/PrivateRoute';
+import { Error404 } from "../routes/Error404.jsx";
 /** @jsxImportSource @emotion/react */
-import { jsx } from '@emotion/react';
-
+import { jsx } from "@emotion/react";
 
 export const App = () => {
   return (
     <div
       css={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        minHeight: "700px",
+        display: "flex",
+        justifyContent: "center",
         fontSize: 30,
-        color: '#010101',
-      }}
-    >
+        color: "#010101",
+        background: 'linear-gradient(27deg, rgba(84,1,81,1) 19%, rgba(16,51,173,1) 55%, rgba(0,212,255,1) 100%)',
+      }}>
       <ErrorBoundary>
-        <Phonebook />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPage />}>
+              <Route index element={<HomePage />} />
+              <Route path='home' element={<HomePage />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="phonebook" element={<Phonebook />} />
+            </Route>
+            <Route path='*' element={<MainPage/>}/>
+          </Routes>
+        </BrowserRouter>
       </ErrorBoundary>
     </div>
   );

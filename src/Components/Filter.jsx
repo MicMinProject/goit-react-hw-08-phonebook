@@ -6,20 +6,22 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 const Filter = ({onChange}) =>{
-  const filter = useSelector((state) => state.contactsReducer.contacts.filter);
+  const filter = useSelector((state) => state.persistedReducer.contacts.contacts.filter);
   return(
     <>
-      <p>Find contacts by name</p>
       <input
         css={{
-          display: 'block',
-          marginTop: '10px',
-          marginBottom: '20px',
-          width: '300px',
-          height: '30px',
-          borderWidth: '2px',
+          width: "400px",
+          height: "50px",
+          marginBottom: "10px",
+          fontSize: "20px",
+          borderRadius: "10px",
+          borderColor: "#abacac",
+          backgroundColor: "#ced4d4",
         }}
+        
         type='text'
+        placeholder='Search by name'
         name='filter'
         value={filter}
         onChange={onChange}

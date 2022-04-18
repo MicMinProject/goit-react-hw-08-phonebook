@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { fetchAsync, addAsync, deleteAsync } from "./fetchAPI";
 
-const INITIAL_STATE = {
+const CONTACTS_INITIAL_STATE = {
   contacts: {
     items: [],
     filter: "",
@@ -10,7 +10,7 @@ const INITIAL_STATE = {
 
 const contactsSlice = createSlice({
   name: "contacts",
-  initialState: INITIAL_STATE,
+  initialState: CONTACTS_INITIAL_STATE,
   reducers: {
     setFilter: (state, action) => {
       state.contacts.filter = action.payload;
@@ -19,18 +19,21 @@ const contactsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAsync.fulfilled, (state, action) => {
+        // console.log(current(state));
         state.contacts.items = action.payload;
       })
       .addCase(addAsync.fulfilled, (state, action) => {
         state.contacts.items = [...state.contacts.items, action.payload];
       })
       .addCase(deleteAsync.fulfilled, (state, action) => {
-        state.contacts.items = action.payload;
+        state.contacts.items.filter(contact => contact.id !== action.payload)
       });
   },
 });
 
-export { INITIAL_STATE, fetchAsync, addAsync, deleteAsync };
+
+
+export { fetchAsync, addAsync, deleteAsync };
 export const { setFilter } = contactsSlice.actions;
 export default contactsSlice.reducer;
 

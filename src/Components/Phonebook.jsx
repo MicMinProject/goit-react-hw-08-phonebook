@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilter, fetchAsync, addAsync, deleteAsync } from "../Utils/reducer";
-import Filter from "./Filter.jsx";
+import { setFilter, fetchAsync, addAsync, deleteAsync } from "../utils/contactsReducer";
 import ContactForm from "./ContactForm.jsx";
 import ContactList from "./ContactList.jsx";
 // this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
@@ -12,11 +11,12 @@ import { jsx } from "@emotion/react";
 function Phonebook() {
   const dispatch = useDispatch();
   const contactsList = useSelector(
-    (state) => state.contactsReducer.contacts.items,
+    (state) => state.persistedReducer.contacts.contacts.items
   );
   const filterString = useSelector(
-    (state) => state.contactsReducer.contacts.filter,
+    (state) => state.persistedReducer.contacts.contacts.filter
   );
+  const token = useSelector(state => state.persistedReducer.users.token)
 
   const filteredOnes = contactsList.filter((contact) =>
     contact.name.toLowerCase().includes(filterString.toLowerCase()),
@@ -27,11 +27,12 @@ function Phonebook() {
     const form = e.currentTarget;
     const name = form.elements.name.value;
     const number = form.elements.number.value;
+    const contact = { name: name, number: number }
     contactsList === []
-      ? dispatch(addAsync({ name: name, phone: number, id: nanoid() }))
+      ? dispatch(addAsync({token, contact}))
       : contactsList.some((contact) => contact.name === name)
       ? alert(`${name} is already in contacts`)
-      : dispatch(addAsync({ name: name, phone: number, id: nanoid() }));
+      : dispatch(addAsync({token, contact}));
     form.reset();
   };
 
@@ -39,12 +40,18 @@ function Phonebook() {
     dispatch(setFilter(e.target.value));
   };
 
-  const handlerDelete = (e) => {
-    dispatch(deleteAsync(e.currentTarget.id));
+  const sendDeleteRequest = async (id) => {
+    await dispatch(deleteAsync({token, id}));
+  };
+
+  const handlerDelete = async (e) => {
+    const id = e.currentTarget.id;
+    await sendDeleteRequest(id);
+    dispatch(fetchAsync(token))
   };
 
   useEffect(() => {
-    dispatch(fetchAsync());
+    dispatch(fetchAsync(token));
   }, []);
 
   // useEffect(() => {
@@ -60,23 +67,12 @@ function Phonebook() {
 
   return (
     <div>
-      <h2>Phonebook</h2>
       <ContactForm onSubmit={handlerSubmit} id={nanoid()} />
 
-      <h3>Contacts</h3>
-      <p 
-        css={{ marginBottom: "0px", fontSize: "20px" }}>
-        You can check contacts data{" "}
-        <a
-          css={{ textDecoration: "none", color: "#FB6700" }}
-          href="https://6250baabe3e5d24b34264548.mockapi.io/contacts">
-          here
-        </a>
-      </p>
-      <Filter onChange={handlerFilter} />
       <ContactList
         contacts={filterString !== "" ? filteredOnes : contactsList}
         onClick={handlerDelete}
+        onChange={handlerFilter}
       />
     </div>
   );
