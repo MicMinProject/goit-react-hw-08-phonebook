@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAsync } from "../utils/fetchAPI";
 /** @jsxImportSource @emotion/react */
@@ -8,6 +8,7 @@ import { jsx } from "@emotion/react";
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const token = useSelector((state) => state.persistedReducer.users.token);
@@ -25,7 +26,10 @@ export const Login = () => {
   };
 
   useEffect(() =>{
-    token && navigate('/phonebook')
+    if(token) {
+      const origin = location.state?.from?.location || '/home';
+      return navigate(origin)
+    }
   }, [token])
 
   return (

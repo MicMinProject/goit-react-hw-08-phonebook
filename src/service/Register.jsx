@@ -36,7 +36,7 @@ export const Register = () => {
   };
 
   useEffect(() => {
-    token && navigate("/phonebook");
+    token && navigate("/contacts");
   }, [token]);
 
   return (

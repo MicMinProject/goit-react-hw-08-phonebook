@@ -1,15 +1,9 @@
 import { useSelector } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, Navigate } from "react-router-dom";
 
-export const PrivateRoute = () => {
+export const PrivateRoute = ({children}) => {
   const token = useSelector((state) => state.persistedReducer.users.token);
-  const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    !token && navigate("/login");
-    console.log(token)
-  }, [token]);
-
-  return <Outlet />;
+  return token ? children : <Navigate to='/login' replace state={{ from: location }}/>
 };

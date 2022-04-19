@@ -30,9 +30,14 @@ export const App = () => {
               <Route path="home" element={<HomePage />} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-              <Route element={<PrivateRoute/>}>
-                <Route path='phonebook' element={<UserMenu/>}/>
-              </Route>
+              <Route
+                path="contacts"
+                element={
+                  <PrivateRoute>
+                    <UserMenu />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route path="*" element={<Error404 />} />
           </Routes>

@@ -41,7 +41,7 @@ export const HomePage = () => {
           },
         }}
         href="https://micminproject.github.io/goit-react-hw-08-phonebook/">
-        Strona na GH Pages
+        GH Pages Deployment
       </a>
       <a
         css={{
@@ -69,7 +69,7 @@ export const HomePage = () => {
           },
         }}
         href="https://github.com/MicMinProject/goit-react-hw-08-phonebook.git">
-        Repozytorium
+        Repository
       </a>
       {token ? <NavLink style={({ isActive }) =>
                   isActive
@@ -112,7 +112,7 @@ export const HomePage = () => {
                         },
                         textDecoration: "none",
                       }
-                } to='/phonebook'>Go to contacts</NavLink> : null}
+                } to='/contacts'>Go to contacts</NavLink> : null}
     </div>
   );
 };
