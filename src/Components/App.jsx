@@ -4,7 +4,7 @@ import { Login } from "../service/Login";
 import { Register } from "../service/Register";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { MainPage } from "../service/MainPage";
-import { HomePage } from "../service/HomePage";
+import { HomePage } from "../service/HomePage/HomePage";
 import { PrivateRoute } from "../routes/PrivateRoute";
 import { Error404 } from "../routes/Error404.jsx";
 /** @jsxImportSource @emotion/react */
@@ -39,7 +39,7 @@ export const App = () => {
                 }
               />
             </Route>
-            <Route path="*" element={<Error404 />} />
+            <Route path="*" element={<MainPage />} />
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>

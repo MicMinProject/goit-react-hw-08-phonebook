@@ -37,7 +37,7 @@ export const MainPage = () => {
           <NavLink to="/home">
             <button
               css={{
-
+                cursor: 'pointer',
                 padding: "10px 30px",
                 fontSize: "25px",
                 border: "0px",
