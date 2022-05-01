@@ -38,6 +38,9 @@ const userSlice = createSlice({
       .addCase(logoutAsync.fulfilled, (state) =>{
         state.token = null;
       })
+      .addCase(logoutAsync.rejected, (state) =>{
+        state.token = null;
+      })
   }
 
 })
